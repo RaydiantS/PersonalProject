@@ -9,18 +9,12 @@ public class HoldScript : MonoBehaviour
     //Make sure "add" and "remove" happens once for each note
     float holdTime, holdingTime = 0f;
     bool notAdded = true, notRemoved = true, notRight = true, holding;
-    SpriteRenderer holdSprite;
+    public SpriteRenderer holdSprite;
 
     void OnEnable()
     {
         holdSprite = gameObject.GetComponentInChildren<SpriteRenderer>();
         holdTime = DataTransfer.holdTime;
-
-        //locate the hold
-        transform.position = new Vector3(1, 1, holdTime * 18.25f);
-
-        //drop the hold
-        transform.Translate(0, 0, holdTime * -18.25f);
     }
 
 
@@ -32,6 +26,7 @@ public class HoldScript : MonoBehaviour
         if (notAdded & timer > -0.05f)
         {
             DataTransfer.holdHeadJudgeList.Add(this);
+            Debug.Log(" ******* hold add/remove " + this + "added, count = " + DataTransfer.holdHeadJudgeList.Count);
             notAdded = false;
         }
         //else if(notRight && timer >= 0f)
@@ -42,6 +37,7 @@ public class HoldScript : MonoBehaviour
         else if (notRemoved && timer > 0.05f)
         {
             DataTransfer.holdHeadJudgeList.Remove(this);
+            Debug.Log(" ******* hold add/remove " + this + "removed, count = " + DataTransfer.holdHeadJudgeList.Count);
             notRemoved = false;
             Miss();
         }
@@ -102,7 +98,6 @@ public class HoldScript : MonoBehaviour
             holdingTime += Time.deltaTime;
             holding = false;
             transform.position = new Vector3(1, 1, (holdTime - holdingTime) * 18.25f);
-            transform.Translate(0, 0, -18.25f * Time.deltaTime);
             if(holdingTime > holdTime)
             {
                 DataTransfer.holdMiddleJudgeList.Remove(this);

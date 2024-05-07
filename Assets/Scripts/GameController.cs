@@ -12,9 +12,10 @@ public class GameController : MonoBehaviour
     public AudioSource music;
     float timer = -1f;
     int indexOfNote = 0;
-    public GameObject tapNote, dragNote, flickNote;
+    public GameObject tapNote, dragNote, flickNote, holdNote;
     private TempGoDown tempGoDownScript;
     private float generateFactor;
+    int tempFrameCounter;
 
     // Start is called before the first frame update
     void Start()
@@ -30,6 +31,8 @@ public class GameController : MonoBehaviour
     void Update()
     {
         GenerateChart();
+        //tempFrameCounter++;
+        //Debug.Log("**********The Frame Speed: " + tempFrameCounter / (timer+1));
     }
 
 
@@ -122,33 +125,32 @@ public class GameController : MonoBehaviour
             {
                 for (int i = noteQuantity[indexOfNote] - 1; i >= 0; i--)
                 {
-                    Debug.Log("index of note: " + indexOfNote);
-                    Debug.Log("note quantity: " + noteQuantity[indexOfNote]);
-                    switch (noteType[indexOfNote])
+                    switch (noteType[0])
                     {
                         case 0:
-                            Instantiate(tapNote, new Vector3(notePosition[indexOfNote], 0, 17.5f + 3.75f * generateFactor), Quaternion.identity);
-                            indexOfNote++;
+                            Instantiate(tapNote, new Vector3(notePosition[0], 0, 17.5f + 3.75f * generateFactor), Quaternion.identity);
                             break;
                         case 1:
-                            Instantiate(dragNote, new Vector3(notePosition[indexOfNote], 0, 17.5f + 3.75f * generateFactor), Quaternion.identity);
-                            indexOfNote++;
+                            Instantiate(dragNote, new Vector3(notePosition[0], 0, 17.5f + 3.75f * generateFactor), Quaternion.identity);
                             break;
                         case 2:
-                            Instantiate(flickNote, new Vector3(notePosition[indexOfNote], 0, 17.5f + 3.75f * generateFactor), Quaternion.identity);
-                            indexOfNote++;
+                            Instantiate(flickNote, new Vector3(notePosition[0], 0, 17.5f + 3.75f * generateFactor), Quaternion.identity);
                             break;
                         case 3:
-                            DataTransfer.holdTime = noteHoldTime[indexOfNote];
-                            noteHoldTime.RemoveAt(indexOfNote);
-                            indexOfNote++;
+                            DataTransfer.holdTime = noteHoldTime[0];
+                            Instantiate(holdNote, new Vector3(notePosition[0], 0, 17.5f + 3.75f * generateFactor), Quaternion.identity);
+                            noteHoldTime.RemoveAt(0);
                             break;
                     }
-                    noteType.RemoveAt(indexOfNote);
-                    notePosition.RemoveAt(indexOfNote);
+                    
+                    noteType.RemoveAt(0);
+                    notePosition.RemoveAt(0);
+
                 }
 
+                indexOfNote++;
             }
+            
         }
         //if timer is larger than equal to the timestamp for index-th note
 

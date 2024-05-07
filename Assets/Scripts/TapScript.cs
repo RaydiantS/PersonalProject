@@ -19,10 +19,11 @@ public class TapScript : MonoBehaviour
     {
         timer += Time.deltaTime;
 
-        //if in the judgement range (+-50ms), add yourself to judge list for judgement
-        if(notAdded & timer > -0.05f)
+        //if in the judgement range (+-100ms), add yourself to judge list for judgement
+        if(notAdded & timer > -0.15f)
         {
             DataTransfer.tapJudgeList.Add(this);
+            //Debug.Log(" ******* tap add/remove " + this + "added, count = " + DataTransfer.tapJudgeList.Count);
             notAdded = false;
         }
         //else if(notRight && timer >= 0f)
@@ -30,9 +31,10 @@ public class TapScript : MonoBehaviour
         //    Debug.Log("Just right timing at " + transform.position.z);
         //    notRight = false;
         //}
-        else if (notRemoved && timer > 0.05f)
+        else if (notRemoved && timer > 0.15f)
         {
             DataTransfer.tapJudgeList.Remove(this);
+           // Debug.Log(" ******* tap add/remove " + this + "removed, count = " + DataTransfer.tapJudgeList.Count);
             notRemoved = false;
             Miss();
         }
@@ -40,28 +42,32 @@ public class TapScript : MonoBehaviour
 
     public bool judgeTap(float xTapPosition)
     {
+        //Debug.Log("*****1***** judgeTap this = " + this);
         //get the abs value of the x-difference between where the player tapped and the center of the tapNote
+       // Debug.Log(" ********** 1.5 ********* xPos = " + xTapPosition);
         float x = System.Math.Abs(xTapPosition - transform.position.x);
-
+        //Debug.Log("*****2*****");
         //if the difference "x" is too large
-        if(x <= 2.7)
+        if (x <= 2.7)
         {
             //generate effects & calculate score
 
             //remove from judgeList and playing screen since it's finished
             DataTransfer.tapJudgeList.Remove(this);
-            Debug.Log("Perfect Tap! ");
+            Debug.Log("Perfect Tap! At" + transform.position.x);
             Destroy(gameObject);
+            //Debug.Log("*****3*****");
             return true;
         }
-            return false;
+        //Debug.Log("*****4*****");
+        return false;
 
     }
 
     void Miss()
     {
         //generate effects & calculate score
-        Debug.Log("Miss Tap! ");
+        Debug.Log("Miss Tap! At " + transform.position.x);
         Destroy(gameObject);
     }
 }

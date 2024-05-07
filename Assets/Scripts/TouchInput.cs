@@ -11,6 +11,7 @@ public class TouchInput : MonoBehaviour
 
     public GameObject lineDisplay;
     List<GameObject> touchPositions = new List<GameObject>();
+    
 
 
     void Start()
@@ -21,6 +22,7 @@ public class TouchInput : MonoBehaviour
 
     void Update()
     {
+        bool removed;
         copyToLastTouch();
 
         getTouchInput();
@@ -28,15 +30,56 @@ public class TouchInput : MonoBehaviour
         //for every tapNote to be judged in the judgelist...
         for(int i = 0; i < DataTransfer.tapJudgeList.Count; i++)
         {
-            //for every tapInput in the taplist...
-            for(int n = 0; n < tap.Count; n++)
+            removed = false;
+            Debug.Log("*****Before FOR, i-index: " + i);
+            if (tap.Count != 0)
             {
-                //if the tapInput is judged true by the function
-                if(DataTransfer.tapJudgeList[i].judgeTap(tap[n]) == true)
+                
+                //for every tapInput in the taplist...
+                for (int n = 0; n < tap.Count;)
                 {
-                    tap.Remove(tap[n]);
+                    
+                    Debug.Log("*****Before FOR, n-index: " + n);
+
+
+                    //if the tapInput is judged true by the function
+                    if (DataTransfer.tapJudgeList[i].judgeTap(tap[n]) == true)
+                    {
+                        //Debug.Log("********Before Removed, n " + n + "tap.count is " + tap.Count);
+
+                        tap.Remove(tap[n]);
+                        removed = true;
+
+
+
+                        //Problem: Removing the tap judge might lead to wrong index references
+                        //Possible solution: Manually increase index
+
+                        //Debug.Log("********After Removed, n " + n + "tap.count is " + tap.Count);
+                        //make a clone, iterate over clone, remove from original
+                    }
+                    else
+                    {
+                        n++;
+                        
+                    }
+                    Debug.Log("*****After FOR, n-index: " + n);
+                }
+                Debug.Log("*****After FOR, i-index: " + i);
+
+                if (removed)
+                {
+                    i--;
                 }
             }
+
+            
+            else
+            {
+                break;
+            }
+            
+
         }
 
         for (int i = 0; i < DataTransfer.dragJudgeList.Count; i++)

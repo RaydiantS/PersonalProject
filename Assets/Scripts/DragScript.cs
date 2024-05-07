@@ -20,13 +20,13 @@ public class DragScript : MonoBehaviour
         timer += Time.deltaTime;
 
         //if in the judgement range (+-50ms), add yourself to judge list for judgement
-        if (notAdded & timer > -0.05f)
+        if (notAdded & timer > -0.15f)
         {
             DataTransfer.dragJudgeList.Add(this);
             notAdded = false;
         }
        
-        else if (notRemoved && timer > 0.05f)
+        else if (notRemoved && timer > 0.15f)
         {
             DataTransfer.dragJudgeList.Remove(this);
             notRemoved = false;
