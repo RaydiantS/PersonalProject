@@ -5,13 +5,14 @@ using UnityEngine;
 public class DragScript : MonoBehaviour
 {
     float timer = -1f;
+    public EffectAndScore effectAndScore;
 
     //Make sure "add" and "remove" happens once for each note
     bool notAdded = true, notRemoved = true, notRight = true;
 
     void Start()
     {
-
+        effectAndScore = GameObject.Find("GameController").GetComponent<EffectAndScore>();
     }
 
 
@@ -20,13 +21,13 @@ public class DragScript : MonoBehaviour
         timer += Time.deltaTime;
 
         //if in the judgement range (+-50ms), add yourself to judge list for judgement
-        if (notAdded & timer > -0.15f)
+        if (notAdded & timer > -0.08f)
         {
             DataTransfer.dragJudgeList.Add(this);
             notAdded = false;
         }
        
-        else if (notRemoved && timer > 0.15f)
+        else if (notRemoved && timer > 0.08f)
         {
             DataTransfer.dragJudgeList.Remove(this);
             notRemoved = false;
@@ -43,10 +44,16 @@ public class DragScript : MonoBehaviour
         if (x <= 2.7)
         {
             //generate effects & calculate score
+            effectAndScore.relativeScore++;
+            effectAndScore.comboCount++;
+            Vector3 particleTransform = effectAndScore.effect.transform.position;
+            particleTransform.x = transform.position.x;
+            effectAndScore.effect.transform.position = particleTransform;
+            effectAndScore.effect.Play();
 
             //remove from judgeList and playing screen since it's finished
             DataTransfer.dragJudgeList.Remove(this);
-            Debug.Log("Perfect Drag! ");
+            effectAndScore.perfectCounts++;
             Destroy(gameObject);
             return true;
         }
@@ -56,7 +63,9 @@ public class DragScript : MonoBehaviour
 
     void Miss()
     {
-        //generate effects & calculate score
+        //generate effects & calculate combo
+        effectAndScore.comboCount = 0;
+        effectAndScore.missCounts++;
         Debug.Log("Miss Drag! ");
         Destroy(gameObject);
     }
