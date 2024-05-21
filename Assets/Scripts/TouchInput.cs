@@ -26,7 +26,6 @@ public class TouchInput : MonoBehaviour
         copyToLastTouch();
 
         getTouchInput();
-
         //for every tapNote to be judged in the judgelist...
         for(int i = 0; i < DataTransfer.tapJudgeList.Count; i++)
         {

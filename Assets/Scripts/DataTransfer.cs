@@ -7,6 +7,7 @@ public static class DataTransfer
 {
     //list for tap judgement
     public static float holdTime;
+    public static GameController controller;
     public static List<TapScript> tapJudgeList = new List<TapScript>();
     public static List<DragScript> dragJudgeList = new List<DragScript>();
     public static List<FlickScript> flickJudgeList = new List<FlickScript>();
